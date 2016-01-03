@@ -1,0 +1,28 @@
+{
+  "name": "blog1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "nickchu",
+  "license": "ISC",
+  "dependencies": {
+    "errorhandler": "^1.4.2",
+    "express": "^4.13.3",
+    "jade": "^1.11.0",
+    "mongodb": "^2.0.48",
+    "mongoskin": "^2.0.3",
+    "stylus": "^0.52.4"
+  },
+  "devDependencies": {
+    "expect.js": "^0.3.1",
+    "mocha": "^2.3.3",
+    "superagent": "^1.4.0",
+    "grunt": "^0.4.5",
+    "grunt-concurrent": "^2.1.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-nodemon": "^0.3.0"
+  }
+}

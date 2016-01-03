@@ -1,0 +1,20 @@
+extends layout
+
+block page
+	-var menu = 'post'
+block content
+	h2 Post an Article
+	div= error
+	div.col-md-8
+		form(action='/post',method='POST',role='form')
+			.form-group
+				label(for='title') Title
+				input#title.form-control(name='title',type="text",placeholder='请填写书名...')
+			.form-group
+				label(for='slug') Slug
+				input#slug.form-control(name='slug',type='text',placeholder="请输入副标题...")
+				span.help-block 这个字段将用在URL中
+			.form-group
+				label(for="text") Text
+				input#text.form-control(name='text',rows='5',type='text',placeholder="请填入简介...")
+			button.btn.btn-primary(type='submit') 保存
