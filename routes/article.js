@@ -26,3 +26,21 @@ exports.add = function(req,res,next){
 		res.send(articleResponse);
 	});
 };
+
+// PUT article API
+exports.edit = function(req, res, next){
+	if(!req.params.id) return next(new Error('No article ID.'));
+	req.collections.articles.updateById(req.params.id,{$set:req.body.article},function(error,count){
+		if(error) return next(error);
+		res.send({affectedCount:count});
+	});
+};
+
+// DELETE article API.
+exports.del = function(req, res, next){
+	if(!req.params.id) return next(new Error('No article ID.'));
+	req.collections.articles.removeById(req.params.id, function(error, count){
+		if(error) return next(error);
+		res.send({affectedCount:count});
+	});
+};
