@@ -1,11 +1,11 @@
 var express = require("express");
 
-var http = require("http");
-var path = require("path");
+var http = require("http");  //导入处理http协议的模块
+var path = require("path");  //导入处理文件路径的模块
 
 var mongoskin = require("mongoskin");
 
-var routes = require('./routes');
+var routes = require('./routes');   //实际上注入的是请求处理程序
 
 var dbUrl = process.env.MONGOHQ_URL || 'mongodb://@localhost:27017/blog';
 var db = mongoskin.db(dbUrl,{safe:true});
@@ -14,7 +14,7 @@ var collections = {
 	users: db.collection('users')
 };
 
-var errorHandler = require('errorhandler');
+var errorHandler = require('errorhandler');  //导入错误处理模块
 
 var app = express();
 
@@ -25,10 +25,10 @@ app.use(function(req, res, next) {
   return next();
 });
 
-app.set('port', process.env.PORT || 3000);
-app.set('views', './views');
-app.set('view engine', 'jade');
-app.use(express.static(path.join(__dirname, 'public')));
+app.set('port', process.env.PORT || 3000);  //设置服务器端口
+app.set('views', './views');  //设置视图文件路径,这样在后面的路由中就可以用简洁的相对路径来表示
+app.set('view engine', 'jade');  //设置模板引擎
+app.use(express.static(path.join(__dirname, 'public')));  //设置静态资源地址
 
 
 
