@@ -15,5 +15,5 @@ exports.logout = function(req,res,next){
 
 // POST quthenticate route.
 exports.authenticate = function(req,res,next){
-	res,redirect('/admin');
+	res.redirect('/admin');
 };

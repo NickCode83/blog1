@@ -34,11 +34,11 @@ app.set('view engine', 'jade');  //设置模板引擎
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
-app.use(methodOverride);
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(methodOverride());
 app.use(express.static(path.join(__dirname, 'public')));  //设置静态资源地址
 
-
+// TODO: 测试
 
 // app.get('/index', function(req, res){
 // 	res.render(
@@ -88,19 +88,19 @@ if ('development' == app.get('env')) {
   否则会报Typeerror错误
  */
 app.get('/',routes.index);
-// app.get('/login',routes.user.login);
-// app.post('/login',routes.user.authenticate);
-// app.get('/logout',routes.user.logout);
-// app.get('/admin',routes.article.admin);
-// app.get('/post',routes.article.post);
-// app.post('/post',routes,article.postArticle);
+app.get('/login',routes.user.login);
+app.post('/login',routes.user.authenticate);
+app.get('/logout',routes.user.logout);
+app.get('/admin',routes.article.admin);
+app.get('/post',routes.article.post);
+app.post('/post',routes.article.postArticle);
 app.get('/articles/:slug',routes.article.show);
 
 //REST API路由
-app.get('/api/articles',routes.article.list);
-// app.post('/api/articles',routes.article.add);
-// app.put('/api/articles/:id',routes.article.edit);
-// app.del('api/articles/:id',routes.article.del);
+app.get('/api/articles', routes.article.list);
+app.post('/api/articles', routes.article.add);
+app.put('/api/articles/:id', routes.article.edit);
+app.delete('/api/articles/:id', routes.article.del);
 
 //404 catch-all路由(此路由一定放在路由最下方，顺序很重要)
 app.all('*',function(req,res){
