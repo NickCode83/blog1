@@ -15,9 +15,11 @@ var cookieParser = require('cookie-parser');
 var logger = require("morgan");//导入morgan日志模块
 var errorHandler = require('errorhandler');  //导入错误处理模块
 var bodyParser = require('body-parser');
+var session = require('express-session');
 var methodOverride = require('method-override');
 
 var app = express();
+app.locals.appTitle = 'blog-nick';
 
 //添加一个中间件来暴露Mongoskin/MongoDBji集合在每个Expres.js中的路径，不要忘了调用next(),否则每个请求都要延迟
 app.use(function(req, res, next) {
@@ -36,6 +38,8 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride());
+app.use(cookieParser('3CCC4ACD-6ED1-4844-9217-82131BDCB239'));//解析发送和接受的cookie,注意:cookieparser()需要在session()前执行,因为session需要依赖cookie才能正常工作
+app.use(session({secret: '2C44774A-D649-4D44-9535-46E296EF984F'}));//在每个请求体中暴露res.session对象,并且在内存或持久化存储(如MongoDB或Redis中)中存储session数据.
 app.use(express.static(path.join(__dirname, 'public')));  //设置静态资源地址
 
 // TODO: 测试
@@ -81,6 +85,23 @@ if ('development' == app.get('env')) {
   app.use(errorHandler());
 }
 
+//用户认证中间件:为了把用户是否经过认证的信息传递给模板,这里实现了一个中间件,在判断req.session.admin为true时,会在res.locals中增加一个属性
+app.use(function(req, res, next){
+	if(req.session && req.session.admin){
+		res.locals.admin = true;
+	}
+	next();
+});
+
+//权限管理
+var authorize = function(req, res, next){
+	if(req.session && req.session.admin){
+		return next();
+	}else{
+		return res.send(401);
+	}
+};
+
 //GET和POST路由，主要是把Jade渲染成HTML
 /*
   必须要首先读入这个index，同时在index.js中require进其余几个routes的js文件，
@@ -91,12 +112,13 @@ app.get('/',routes.index);
 app.get('/login',routes.user.login);
 app.post('/login',routes.user.authenticate);
 app.get('/logout',routes.user.logout);
-app.get('/admin',routes.article.admin);
-app.get('/post',routes.article.post);
-app.post('/post',routes.article.postArticle);
-app.get('/articles/:slug',routes.article.show);
+app.get('/admin',authorize, routes.article.admin);
+app.get('/post',authorize, routes.article.post);
+app.post('/post',authorize, routes.article.postArticle);
+app.get('/articles/:slug',authorize, routes.article.show);
 
 //REST API路由
+app.all('/api',authorize);
 app.get('/api/articles', routes.article.list);
 app.post('/api/articles', routes.article.add);
 app.put('/api/articles/:id', routes.article.edit);
