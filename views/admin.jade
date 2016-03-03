@@ -3,24 +3,25 @@ extends layout
 block page
 	-var menu= 'admin'
 block content
-	if(articles === 0)
-		p
-			|目前没有任何文章，请点击
-			a(href='/post') 这里
-			|添加一篇文章。
-	else
-		table.table.table-stripped
-			thead
-				th(colspan='2') Actions
-				th Post Title
-			tbody
-				each article, index in articles
-					tr(data-id="#{article._id}",class=(!article.published)?"unpublished":"")
-						td.action
-							button.btn.btn-danger.btn-sm.remove(type="button")
-								span.glyphicon.glyphicon-remove(title='Remove')
-						td.action
-							button.btn.btn-default.btn-sm.publish(type="button")
-								span.glyphicon(class=(article.published)?"glyphicon-pause":"glyphicon-play",title=(article.published)?"Unpublish":"Publish")
-						td= article.title
-	script(type="text/javascript",src="js/admin.js")
+	div.admin
+		if(articles === 0)
+			p
+				|目前没有任何文章，请点击
+				a(href='/post') 这里
+				|添加一篇文章。
+		else
+			table.table.table-stripped
+				thead
+					th(colspan='2') Actions
+					th Post Title
+				tbody
+					each article, index in articles
+						tr(data-id="#{article._id}",class=(!article.published)?"unpublished":"")
+							td.action
+								button.btn.btn-danger.btn-sm.remove(type="button")
+									span.glyphicon.glyphicon-remove(title='Remove')
+							td.action
+								button.btn.btn-default.btn-sm.publish(type="button")
+									span.glyphicon(class=(article.published)?"glyphicon-pause":"glyphicon-play",title=(article.published)?"Unpublish":"Publish")
+							td= article.title
+		script(type="text/javascript",src="/js/admin.js")
