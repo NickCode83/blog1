@@ -17,7 +17,7 @@
     "jade": "^1.11.0",
     "method-override": "^2.3.5",
     "mongodb": "^2.0.48",
-    "mongoskin": "^2.0.3",
+    "mongoose": "^4.1.11",
     "morgan": "^1.7.0",
     "stylus": "^0.52.4"
   },

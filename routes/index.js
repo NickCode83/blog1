@@ -6,8 +6,11 @@ exports.user = require('./user');
  */
 
 exports.index = function(req, res, next){
-  req.collections.articles.find({published: true}, {sort: {_id:-1}}).toArray(function(error, articles){
+
+  console.log(req.models.Article);
+  req.models.Article.find({published: true}, null, {sort: {_id:-1}}, function(error, articles){
     if (error) return next(error);
+    console.log('routes to index');
     res.render('index', { articles: articles});
-  })
+  });
 };

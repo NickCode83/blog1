@@ -1,15 +1,13 @@
 var express = require("express");
 var http = require("http");  //导入处理http协议的模块
 var path = require("path");  //导入处理文件路径的模块
-var mongoskin = require("mongoskin");
+var mongoose = require("mongoose");
 var routes = require('./routes');   //实际上注入的是请求处理程序
+var models = require('./models');  //导入模型文件夹
 
 var dbUrl = process.env.MONGOHQ_URL || 'mongodb://@localhost:27017/blog';
-var db = mongoskin.db(dbUrl,{safe:true});
-var collections = {
-	articles: db.collection('articles'),
-	users: db.collection('users')
-};
+
+var db = mongoose.connect(dbUrl, {safe: true});
 
 var cookieParser = require('cookie-parser');
 var logger = require("morgan");//导入morgan日志模块
@@ -23,8 +21,8 @@ app.locals.appTitle = 'blog-nick';
 
 //添加一个中间件来暴露Mongoskin/MongoDBji集合在每个Expres.js中的路径，不要忘了调用next(),否则每个请求都要延迟
 app.use(function(req, res, next) {
-  if (!collections.articles || ! collections.users) return next(new Error("No collections."))
-  req.collections = collections;
+  if (!models.Article || !models.User) return next(new Error("No models."))
+  req.models = models;
   return next();
 });
 
